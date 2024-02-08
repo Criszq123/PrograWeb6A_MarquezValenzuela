@@ -51,11 +51,14 @@
     </select>
 
     <div id="tablero"></div>
+
+    <input type="button" id="reiniciar" value="🔄">
 </body>
 <script>
 
+    
 
-   
+    document.getElementById('reiniciar').addEventListener('click', Reiniciar);
 
 
     function generarTablero(filas, columnas) {
@@ -76,7 +79,16 @@
                 const fila = i;
                 const columna = j;
 
-
+                const coloresNumeros = [
+                    "blue",
+                    "green",
+                    "red",
+                    "purple",
+                    "maroon",
+                    "turquoise",
+                    "black",
+                    "gray"
+                ]
 
                 celda.addEventListener("click", async (e) => {
 
@@ -94,25 +106,28 @@
 
                             if (data.valor != -1 && data.valor != 0) {
                                 spanNumero.setAttribute('style', `color: ${coloresNumeros[data.valor - 1]}`);
-                                spanNumero.textContext = data.valor;
+                                spanNumero.textContent = data.valor;
                                 e.target.appendChild(spanNumero);
                             } else if (data.valor == 0) {
-                                spanNumero.textContex = '';
+                                spanNumero.textContent = '';
                                 e.target.setAttribute('style', 'background-color: gray');
                                 e.target.appendChild(spanNumero);
                             } else {
-                                spanNumero.textContex = '💣';
+                                spanNumero.textContent = '💣';;
                                 e.target.appendChild(spanNumero);
-                                alert('GAME OVER');
-                                window.location.reload();
+                                setTimeout(() => {
+                                    alert('GAME OVER, el juego se reiniciara dentro de poco......');
+                                },200)
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 3000);
+
                             }
                         })
                         .catch((error) => {
                             console.error('Error:', error);
                         });
                 }, fila, columna);
-
-            
 
                 tablero.appendChild(celda);
             }
@@ -122,16 +137,7 @@
         tablero.style.gridTemplateColumns = `repeat(${columnas}, 30px)`;
     }
 
-    const coloresNumeros = [
-        "blue",
-        "green",
-        "red",
-        "purple",
-        "maroon",
-        "turquoise",
-        "black",
-        "gray"
-    ]
+    
 
     document.querySelector('#nivel').addEventListener('change', async (e) => {
         //obtener el nivel seleccionado
@@ -169,6 +175,12 @@
         //generar el tablero
         generarTablero(filas, columnas);
     })
+
+    
+
+function Reiniciar() {
+        window.location.reload();
+    }
 
 
 </script>

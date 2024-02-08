@@ -29,7 +29,7 @@
                 // opcion por defecto si el nivel no es valido
                 $this->filas = 8;
                 $this->columnas = 8;
-                $this->minas = 10;
+                $this->minas = 5;
             }
         }
 
