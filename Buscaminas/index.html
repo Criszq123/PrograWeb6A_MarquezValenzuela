@@ -55,15 +55,14 @@
     <input type="button" id="reiniciar" value="🔄">
 </body>
 <script>
-
-    let gameover = false
+   let gameover = false
     
 
     document.getElementById('reiniciar').addEventListener('click', Reiniciar);
 
 
     function generarTablero(filas, columnas) {
-        if(gameover) return;
+        
         // obtener el contenedor del tablero
         var tablero = document.getElementById("tablero");
 
@@ -96,7 +95,18 @@
                 // CLICK IZQUIERDO
 
                 celda.addEventListener("click", async (e) => {
-
+                if (gameover) {
+                    return;
+                }
+                /*
+                en caso de que en la casilla tenga una bandera puesta
+                simplemente evitara que el usuario pueda dar click izquierdo
+                hasta que el propio usuario lo quiera quitando la bandera
+                
+                */
+                if (e.target.textContent == '🚩') {
+                                return;
+                            }
 
                     await fetch(window.location.href + 'revelar_celda.php',{
                         method: 'POST',
@@ -108,25 +118,38 @@
                         .then(data => {
                             const spanNumero = document.createElement('span');
 
-                            
+                            // mientras nuestra casilla seleccionada tenga un valor diferente de -1 y 0 
+                            //crearemos un span con el valor de la casilla correspondiente
+                            // tomando en base el arreglo colores numeros que creamos anteriormente
                             if(data.valor != -1 && data.valor != 0) {
                                 spanNumero.setAttribute('style', `color: ${coloresNumeros[data.valor - 1]}`);
                                 spanNumero.textContent = data.valor;
                                 e.target.appendChild(spanNumero);
+                                /*
+                                mientras el valor devuelto por el servidor sea
+                                igual a 0, simplemente cambiaremos el color de la casilla 
+                                seleccionada a gris
+                                */
                             } else if (data.valor == 0) {
                                 spanNumero.textContent = '';
                                 e.target.setAttribute('style', 'background-color: gray');
                                 e.target.appendChild(spanNumero);
                             } else {
-                                spanNumero.textContent = '💣';;
+
+            
+                                spanNumero.textContent = '💣';
                                 e.target.appendChild(spanNumero);
+                                
+                                
+                                
                                 setTimeout(() => {
                                     alert('GAME OVER, el juego se reiniciara dentro de poco......');
+                                    e.preventDefault();
                                 },200)
                                 setTimeout(() => {
                                     window.location.reload();
                                 }, 3000);
-
+                                
                             }
                         })
                         .catch((error) => {
@@ -137,8 +160,10 @@
                   
 
                 tablero.appendChild(celda);
+                // con el click derecho ponemos una bandera en
+                // la que nosotros supongamos que este una bomba
                 celda.addEventListener("contextmenu", (e) => {
-                        e.preventDefault();
+                        e.preventDefault(); // evita que el navegador abra el menu contextual por defecto
                         const celdaSeleccionada = e.target;
                         celdaSeleccionada.textContent = celdaSeleccionada.classList.toggle('bandera') ? "🚩" : "";
                     });
@@ -189,9 +214,6 @@
         //generar el tablero
         generarTablero(filas, columnas);
     })
-
-    
-
 function Reiniciar() {
         window.location.reload();
     }
