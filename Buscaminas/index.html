@@ -52,10 +52,10 @@
 
     <div id="tablero"></div>
 
-    <input type="button" id="reiniciar" value="🔄">
+    <input type="button" id="reiniciar" value="🔄 : Reiniciar ">
 </body>
 <script>
-   let gameover = false
+   let gameover = false // es una herramienta que nos servira para mas tarde
     
 
     document.getElementById('reiniciar').addEventListener('click', Reiniciar);
@@ -75,6 +75,8 @@
                 var celda = document.createElement("div");
                 celda.className = "celda"; // con esa clase se creara ese div
                 celda.textContent = ""; // puedes inicializar con el valor que desees
+                celda.setAttribute('data-fila', i);
+                celda.setAttribute('data-columna', j);
 
 
                 const fila = i;
@@ -93,17 +95,24 @@
 
 
                 // CLICK IZQUIERDO
-
+                
                 celda.addEventListener("click", async (e) => {
-                if (gameover) {
-                    return;
-                }
+                
+                    /*
+                    
+                    mientras nuestra variable game over sea de valor falso
+                    el usuario puede dar click izquierdo
+                    
+                    */
+
+                if (gameover) return; 
+                
                 /*
                 en caso de que en la casilla tenga una bandera puesta
                 simplemente evitara que el usuario pueda dar click izquierdo
                 hasta que el propio usuario lo quiera quitando la bandera
-                
                 */
+               
                 if (e.target.textContent == '🚩') {
                                 return;
                             }
@@ -117,6 +126,7 @@
                     }).then(response => response.json())
                         .then(data => {
                             const spanNumero = document.createElement('span');
+                            e.target.classList.add('revelada');
 
                             // mientras nuestra casilla seleccionada tenga un valor diferente de -1 y 0 
                             //crearemos un span con el valor de la casilla correspondiente
@@ -125,6 +135,7 @@
                                 spanNumero.setAttribute('style', `color: ${coloresNumeros[data.valor - 1]}`);
                                 spanNumero.textContent = data.valor;
                                 e.target.appendChild(spanNumero);
+                                console.log("hola no era una bomba")
                                 /*
                                 mientras el valor devuelto por el servidor sea
                                 igual a 0, simplemente cambiaremos el color de la casilla 
@@ -134,21 +145,33 @@
                                 spanNumero.textContent = '';
                                 e.target.setAttribute('style', 'background-color: gray');
                                 e.target.appendChild(spanNumero);
-                            } else {
 
-            
+                                /*
+                                
+                                ahora bien, cuando el valor sea -1 
+                                crearemos un emoji de bomba dentro de esa
+                                
+                                */
+                            } else {
                                 spanNumero.textContent = '💣';
                                 e.target.appendChild(spanNumero);
+                                // llamamos a nuestro metodo reventarminas, el cual al activar una sola mina, activara todas
+                                reventarminas();
+                                /*
                                 
+                                damos un retraso de medio segundo para asegurarnos que nuestro metodo reventar minas
+                                haya realizado su funcion de forma correcta
                                 
-                                
+                                */
                                 setTimeout(() => {
-                                    alert('GAME OVER, el juego se reiniciara dentro de poco......');
-                                    e.preventDefault();
-                                },200)
+                                        gameover = true; 
+                                        alert("GAME OVER, el juego se reiniciara dentro de poco .......");
+                                    }, 500)
+
+                                    //ahora hacemos un retraso de 5 segundos, esto para reiniciar el juego para la siguiente ocasion
                                 setTimeout(() => {
                                     window.location.reload();
-                                }, 3000);
+                                }, 5000);
                                 
                             }
                         })
@@ -157,7 +180,7 @@
                         });
                 }, fila, columna);
 
-                  
+            
 
                 tablero.appendChild(celda);
                 // con el click derecho ponemos una bandera en
@@ -167,10 +190,10 @@
                         const celdaSeleccionada = e.target;
                         celdaSeleccionada.textContent = celdaSeleccionada.classList.toggle('bandera') ? "🚩" : "";
                     });
-
             }
 
         }
+    
 
         // Establecer las dimensiones del tablero usando CSS Grid
         tablero.style.gridTemplateColumns = `repeat(${columnas}, 30px)`;
@@ -214,6 +237,49 @@
         //generar el tablero
         generarTablero(filas, columnas);
     })
+
+    function reventarminas() {
+        const celdas = document.querySelectorAll('.celda');
+
+celdas.forEach(celda => {
+
+    /*obtenermos los datos de la fila y columna de la celda
+    que posteriormente utilizaremos para nuestra clase revelar_celda.php
+    */
+    const fila = celda.getAttribute('data-fila');
+    const columna = celda.getAttribute('data-columna');
+
+
+
+    /*
+    Este fragmento de código envía un objeto en cadena JSON a un servidor y luego procesa la respuesta,
+    Si la respuesta contiene un valor de -1, 
+    crea un elemento span con un emoji de bomba y lo agrega a un elemento span creado para la celda
+    */
+    fetch(window.location.href + 'revelar_celda.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ fila, columna })
+    }).then(response => response.json())
+        .then(data => {
+            if (data.valor == -1) {
+                const spanbomba = document.createElement('span');
+                spanMina.textContent = '💣';
+                celda.classList.add('revelada');
+                celda.innerHTML = ''; 
+                celda.appendChild(spanbomba);
+            }
+        })
+        .catch((error) => {
+            console.error('Error: ', error);
+            alert('Error al mostrar la ubicación de las minas.');
+        });
+}); 
+    }
+
+    //funcion de reinicio voluntario de nuestro boton
 function Reiniciar() {
         window.location.reload();
     }

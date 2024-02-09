@@ -13,23 +13,23 @@
                 case 'facil':
                     $this->filas = 8;
                     $this->columnas = 8;
-                    $this->minas = 5;
+                    $this->minas = 10;
                 break;
                 case 'medio':
                     $this->filas = 16;
                     $this->columnas = 16;
-                    $this->minas = 15;
+                    $this->minas = 50;
                 break;
                 case 'dificil':
                     $this->filas = 16;
                     $this->columnas = 30;
-                    $this->minas = 20;
+                    $this->minas = 100;
                 break;
                 default:
                 // opcion por defecto si el nivel no es valido
                 $this->filas = 8;
                 $this->columnas = 8;
-                $this->minas = 5;
+                $this->minas = 10;
             }
         }
 
