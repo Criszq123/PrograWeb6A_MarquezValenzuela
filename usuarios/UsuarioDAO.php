@@ -42,7 +42,13 @@ class UsuarioDAO implements IDao {
             ':apellidos' => $usuario->getApellidos(),
             ':correo' => $usuario->getCorreo()
         ];
-        return $this->dataSource->ejecutarActualizacion($sql, $values);
+        $this->dataSource->ejecutarActualizacion($sql, $values);
+
+        $id = $this->dataSource->lastInsertId();
+
+        $usuario->setId($id);
+
+        return $id;
     }
     public function actualizar(Usuario $usuario){
         $sql = "UPDATE usuarios SET nombres = :nombres, apellidos = :apellidos, correo = :correo WHERE id = :id";
