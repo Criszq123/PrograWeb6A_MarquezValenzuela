@@ -57,7 +57,7 @@ class DataSource {
     }
   }
 
-  public function lastInsertId() {
+  public function lastInsertId() { //funcion que nos permite devolver el último ID insertado desde la conexion a la base de datos
     return $this->conexion->lastInsertId();
 }
 

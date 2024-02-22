@@ -44,11 +44,11 @@ class UsuarioDAO implements IDao {
         ];
         $this->dataSource->ejecutarActualizacion($sql, $values);
 
-        $id = $this->dataSource->lastInsertId();
+        $id = $this->dataSource->lastInsertId(); // obtiene el id insertado
 
-        $usuario->setId($id);
+        $usuario->setId($id); // define el id
 
-        return $id;
+        return $id; // retorna el id
     }
     public function actualizar(Usuario $usuario){
         $sql = "UPDATE usuarios SET nombres = :nombres, apellidos = :apellidos, correo = :correo WHERE id = :id";
@@ -60,7 +60,7 @@ class UsuarioDAO implements IDao {
         ];
         return $this->dataSource->ejecutarActualizacion($sql, $values);
     }
-    public function eliminar($id){
+    public function eliminar($id){  // funcion eliminar por id 
 
         $sql = "DELETE FROM usuarios WHERE id = :id";
         $values = [
