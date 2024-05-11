@@ -1,0 +1,9 @@
+com\user\Orden\UserRepository.class
+com\user\Orden\User.class
+com\user\Orden\UserController.class
+com\orden\rest\OrdenRepository.class
+com\product\rest\product.class
+com\product\rest\productRepository.class
+com\orden\rest\OrdenController.class
+com\product\rest\productController.class
+com\orden\rest\Orden.class
