@@ -1,15 +1,16 @@
 package com.orden.rest;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
-
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.dispatcher.Parameter;
 import org.apache.struts2.rest.DefaultHttpHeaders;
 import org.apache.struts2.rest.HttpHeaders;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ModelDriven;
-
 import javax.servlet.http.HttpServletRequest;
+
 
 public class OrdenController implements ModelDriven<Object>{
     private static final long serialVersionUID = 1L;
@@ -34,12 +35,18 @@ public class OrdenController implements ModelDriven<Object>{
 
     public HttpHeaders create() {
         HttpServletRequest request = ServletActionContext.getRequest();
+        Map parameters = ActionContext.getContext().getParameters();
+
+        if (!parameters.containsKey("lista") || !parameters.containsKey("idUser") || !parameters.containsKey("id")) {
+            System.out.println("No se han ingresado todos los datos solicitados.");
+            return new DefaultHttpHeaders("error").disableCaching(); // O devuelve los encabezados adecuados para indicar un error
+        }
 
         int id = Integer.parseInt(request.getParameter("id"));
-        String[] productList = request.getParameterValues("productList");
+        List<String> productos = Arrays.asList(parameters.get("lista").toString().split(","));
         int idUser = Integer.parseInt(request.getParameter("idUser"));
 
-        Orden order = new Orden(id, productList, idUser);
+        Orden order = new Orden(id, productos, idUser);
 
         ordenRepository.addOrden(order);
 
@@ -51,23 +58,31 @@ public class OrdenController implements ModelDriven<Object>{
     public HttpHeaders update() {
         Map<String, Parameter> parameters = ActionContext.getContext().getParameters();
 
-        String[] lista = new String[]{parameters.get("lista").getValue()}; // Get the parameter value
-        String idUser = parameters.get("idUser").getValue(); // Get the parameter value
+        if (!parameters.containsKey("lista") || !parameters.containsKey("idUser")) {
+            System.out.println("No se han ingresado todos los datos solicitados.");
+            return new DefaultHttpHeaders("error").disableCaching(); // O devuelve los encabezados adecuados para indicar un error
+        }
 
-        // Obtener el objeto Orden actual y actualizar sus datos
+
+        List<String> productos = Arrays.asList(parameters.get("lista").toString().split(","));
+
+        String idUser = parameters.get("idUser").getValue();
+
+
         Orden orden = (Orden) getModel();
-        orden.setLista(lista);
+
+
+        orden.setProductos(productos);
         orden.setIdUser(Integer.parseInt(idUser));
 
-        // Actualizar el orden en el repositorio
+
         ordenRepository.updateOrden(orden);
 
         model = orden;
-
         System.out.println(model);
-
         return new DefaultHttpHeaders("update").disableCaching();
     }
+
 
     public HttpHeaders destroy() {
         ordenRepository.deleteOrden(id);

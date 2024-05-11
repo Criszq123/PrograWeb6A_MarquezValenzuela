@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <project name="maven-antrun-" default="main"  >
 <target name="main">
-  <copy todir="C:\Users\crist\Downloads\practica\Struct\target/struts2-rest-showcase/WEB-INF/src/java" failonerror="false">
-    <fileset dir="C:\Users\crist\Downloads\practica\Struct/src/main/java"/>
+  <copy todir="C:\Users\crist\Downloads\PrograWeb6A_MarquezValenzuela\Struct\target/struts2-rest-showcase/WEB-INF/src/java" failonerror="false">
+    <fileset dir="C:\Users\crist\Downloads\PrograWeb6A_MarquezValenzuela\Struct/src/main/java"/>
   </copy>
-  <copy todir="C:\Users\crist\Downloads\practica\Struct\target/struts2-rest-showcase/WEB-INF/src/java" failonerror="false">
-    <fileset dir="C:\Users\crist\Downloads\practica\Struct/src/main/resources"/>
+  <copy todir="C:\Users\crist\Downloads\PrograWeb6A_MarquezValenzuela\Struct\target/struts2-rest-showcase/WEB-INF/src/java" failonerror="false">
+    <fileset dir="C:\Users\crist\Downloads\PrograWeb6A_MarquezValenzuela\Struct/src/main/resources"/>
   </copy>
 </target>
 </project>

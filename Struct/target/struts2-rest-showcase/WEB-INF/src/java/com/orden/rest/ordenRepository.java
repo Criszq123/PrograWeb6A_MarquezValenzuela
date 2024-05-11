@@ -1,5 +1,7 @@
 package com.orden.rest;
 
+
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,12 +18,12 @@ public class OrdenRepository {
         return map;
     }
 
-    public void addOrden(Orden orden) {
-        map.put(String.valueOf(orden.getId()), orden);
+    public void addOrden(Orden order) {
+        map.put(String.valueOf(order.getId()), order);
     }
 
-    public void updateOrden(Orden e) {
-        map.put(String.valueOf(e.getId()), e);
+    public void updateOrden(Orden o) {
+        map.put(String.valueOf(o.getId()), o);
         System.out.println(map);
     }
 
@@ -29,3 +31,4 @@ public class OrdenRepository {
         map.remove(id);
     }
 }
+

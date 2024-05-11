@@ -1,14 +1,18 @@
 package com.orden.rest;
 
+import java.util.List;
+
 public class Orden {
 
     private int id;
-    private String lista[];
+
+    private List<String> productos;
+
     private int idUser;
 
-    public Orden(int id, String[] lista, int idUser) {
+    public Orden(int id, List<String> productos, int idUser) {
         this.id = id;
-        this.lista = lista;
+        this.productos = productos;
         this.idUser = idUser;
     }
 
@@ -20,12 +24,12 @@ public class Orden {
         this.id = id;
     }
 
-    public String[] getLista() {
-        return lista;
+    public List<String> getProductos() {
+        return productos;
     }
 
-    public void setLista(String[] lista) {
-        this.lista = lista;
+    public void setProductos(List<String> productos) {
+        this.productos = productos;
     }
 
     public int getIdUser() {

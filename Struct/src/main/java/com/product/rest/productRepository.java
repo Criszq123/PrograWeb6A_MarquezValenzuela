@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class productRepository {
 
-        private static Map<String, product> map = new HashMap<>();
+        private static Map<String, product> map = new HashMap<String, product>();
 
         public productRepository() { }
 

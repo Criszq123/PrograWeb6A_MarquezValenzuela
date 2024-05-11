@@ -1,6 +1,6 @@
-com\user\Orden\UserRepository.class
-com\user\Orden\User.class
-com\user\Orden\UserController.class
+com\user\rest\User.class
+com\user\rest\UserRepository.class
+com\user\rest\UserController.class
 com\orden\rest\OrdenRepository.class
 com\product\rest\product.class
 com\product\rest\productRepository.class

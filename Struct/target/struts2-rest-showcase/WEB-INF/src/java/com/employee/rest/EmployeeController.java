@@ -32,6 +32,11 @@ public class EmployeeController implements ModelDriven<Object> {
   public HttpHeaders create() {
     Map parameters = ActionContext.getContext().getParameters();
 
+    if (!parameters.containsKey("id") || !parameters.containsKey("name") || !parameters.containsKey("company")) {
+      System.out.println("No se han ingresado todos los datos solicitados.");
+      return new DefaultHttpHeaders("error").disableCaching(); // O devuelve los encabezados adecuados para indicar un error
+    }
+
     int id = Integer.parseInt(parameters.get("id").toString());
     String name = parameters.get("name").toString();
     String company = parameters.get("company").toString();
@@ -47,6 +52,11 @@ public class EmployeeController implements ModelDriven<Object> {
 
   public HttpHeaders update() {
     Map<String, Parameter> parameters = ActionContext.getContext().getParameters();
+
+    if (!parameters.containsKey("name") || !parameters.containsKey("company")) {
+      System.out.println("No se han ingresado todos los datos solicitados.");
+      return new DefaultHttpHeaders("error").disableCaching(); // O devuelve los encabezados adecuados para indicar un error
+    }
 
     String name = parameters.get("name").getValue(); // Get the parameter value
     String company = parameters.get("company").getValue(); // Get the parameter value
